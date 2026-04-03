@@ -9,16 +9,17 @@ from gigachat import GigaChat
 load_dotenv()
 
 TOKEN = os.getenv("BOT_TOKEN")
-GIGA_KEY = os.getenv("GIGACHAT_API_KEY")  # Ваш новый ключ
+GIGA_KEY = os.getenv("GIGACHAT_API_KEY")  # Ваш НОВЫЙ ключ
 
 if not TOKEN:
     raise ValueError("BOT_TOKEN не найден!")
 
-# ПРАВИЛЬНАЯ инициализация GigaChat
+# ПРАВИЛЬНАЯ инициализация GigaChat для физических лиц
 giga = GigaChat(
     credentials=GIGA_KEY,          # Ваш ключ авторизации
-    verify_ssl_certs=False,        # Отключаем проверку SSL (для Bothost)
     scope="GIGACHAT_API_PERS",     # Явно указываем версию API для физлиц
+    verify_ssl_certs=False,        # Отключаем проверку SSL (для Bothost)
+    model="GigaChat"               # Базовая модель
 )
 
 bot = Bot(token=TOKEN)
@@ -63,7 +64,6 @@ async def answer_with_giga(message: types.Message):
         await message.answer(f"**Ответ:**\n{answer}", parse_mode="Markdown")
     except Exception as e:
         await message.answer(f"❌ Ошибка GigaChat: {e}\n\nПроверьте API-ключ в настройках.")
-        # Выводим подробную ошибку в логи
         logging.error(f"GigaChat error: {e}")
 
 async def main():
